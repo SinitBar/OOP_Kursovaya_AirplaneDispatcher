@@ -1,0 +1,96 @@
+Airbus A220-100;A
+Airbus A220-300;A
+Airbus A300;B
+Airbus A310;B
+Airbus A318;A
+Airbus A319;A
+Airbus A319neo;B
+Airbus A320;A
+Airbus A320neo;B
+Airbus A321;A
+Airbus A321neo;A
+Airbus A330-200;B
+Airbus A330-300;B
+Airbus A330-800neo;C
+Airbus A330-900neo;C
+Airbus A340-200;C
+Airbus A340-300;B
+Airbus A340-500;C
+Airbus A340-600;C
+Airbus A350-900;B
+Airbus A350-1000;C
+Airbus A380;C
+ATR 42;A
+ATR 72;A
+Comac ARJ21;A
+Comac C919;A
+CRAIC CR929;C
+Harbin Y-12;A
+Xian MA60;A
+BAC 1-11;A
+BAe 748;A
+BAe ATP;A
+BAe Avro RJ 85;A
+Bombardier CRJ-100/200;A
+Bombardier CRJ-550;A
+Bombardier CRJ-700;A
+Bombardier CRJ-705;A
+Bombardier CRJ-900;A
+Bombardier CRJ-1000;A
+Bombardier CS100;A
+Bombardier CS300;A
+Bombardier Dash 7;A
+Bombardier Dash 8 Q100/200;A
+Bombardier Dash 8 Q300;A
+Bombardier Dash 8 Q400;A
+Boeing 707;B
+Boeing 717;A
+Boeing 727;B
+Boeing 737-200;A
+Boeing 737-300;A
+Boeing 737-400;A
+Boeing 737-500;A
+Boeing 737-600;A
+Boeing 737-700;A
+Boeing 737-800;A
+Boeing 737-900;B
+Boeing 737 MAX 7;A
+Boeing 737 MAX 8;B
+Boeing 737 MAX 9;B
+Boeing 747-100;C
+Boeing 747-200;C
+Boeing 747-300;C
+Boeing 747-400;C
+Boeing 747-8;C
+Boeing 757-200;A
+Boeing 757-300;B
+Boeing 767-200;C
+Boeing 767-300;B
+Boeing 767-400;C
+Boeing 777-200;B
+Boeing 777-300;B
+Boeing 777-8;C
+Boeing 777-9;C
+Boeing 787-8;B
+Boeing 787-9;B
+Boeing 787-10;C
+Beechcraft King Air;A
+Beechcraft 1900;A
+Dornier 328Jet;A
+Embraer EMB-110 Bandeirante;A
+Embraer EMB-120 Brasilia;A
+Embraer ERJ-135;A
+Embraer ERJ-140;A
+Embraer ERJ-145;A
+Embraer 170;A
+Embraer 175;A
+Embraer 190;A
+Embraer 195;A
+Embraer Е175-Е2;A
+Embraer Е190-Е2;A
+Embraer Е195-Е2;A
+Fokker F27;A
+Fokker F28;A
+Fokker 50;A
+Fokker 70;A
+Fokker 100;A
