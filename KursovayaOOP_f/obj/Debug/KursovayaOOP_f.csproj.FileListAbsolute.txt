@@ -5,3 +5,10 @@ C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\KursovayaO
 C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.exe
 C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.pdb
 C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.csprojAssemblyReference.cache
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\bin\Debug\KursovayaOOP_f.exe.config
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\bin\Debug\KursovayaOOP_f.exe
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\bin\Debug\KursovayaOOP_f.pdb
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.csproj.CoreCompileInputs.cache
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.exe
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.pdb
+C:\Users\varka\Documents\2 курс, 2 сем\ООП\Курсовая\OOP_Kursovaya_AirplaneDispatcher\KursovayaOOP_f\obj\Debug\KursovayaOOP_f.csprojAssemblyReference.cache
