@@ -279,18 +279,19 @@ namespace KursovayaOOP_f
 
             for (int i = 0; i < rand_airplanes.Count(); i++)
             {
-                DateTime begin = new DateTime();
-                begin = begin.AddHours(currentTime.Hour);
-                begin = begin.AddMinutes(currentTime.Minute);
-                DateTime next_day = new DateTime();
-                next_day = begin.AddDays(1);
-                DateTime end = new DateTime();
+                DateTime begin = new DateTime(1,1,1,currentTime.Hour,currentTime.Minute,0,0);
+                DateTime next_day = new DateTime(1,1,2, currentTime.Hour, currentTime.Minute, 0,0);
+                DateTime end;
                 // рандомно ищем временной интервал [begin; end) для данного самолета внутри тех 24 часов, на которых моделируем
                 do
                 {
+                   
                     int mins = (rnd.Next(0, 60*24/GenerateDelay.integral_step)) * GenerateDelay.integral_step; // домножаем на шаг, который есть минимальная единица измерения времени в программе (5 минут)
-                   if (mins != 0)
+                    if (mins != 0)
+                    {
+                        begin = new DateTime(1, 1, 1, currentTime.Hour, currentTime.Minute, 0, 0);
                         begin = begin.AddMinutes(mins);
+                    }
                     end = begin.AddMinutes(rand_airplanes[i].getRequiredTimeInterval());
                 } while (end >= next_day);
 
