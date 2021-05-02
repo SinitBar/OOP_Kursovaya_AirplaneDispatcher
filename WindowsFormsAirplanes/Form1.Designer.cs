@@ -29,6 +29,7 @@ namespace WindowsFormsAirplanes
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TabControl tabControlAirplanes;
             this.tabPageData = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -48,9 +49,6 @@ namespace WindowsFormsAirplanes
             this.comboBoxAmountOfRunways = new System.Windows.Forms.ComboBox();
             this.labelAmountOfRunways = new System.Windows.Forms.Label();
             this.tabPageRunways = new System.Windows.Forms.TabPage();
-            this.labelRunwayStatus = new System.Windows.Forms.Label();
-            this.labelRunwayNumber = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPageDepartureQueue = new System.Windows.Forms.TabPage();
             this.tabPageArrivalQueue = new System.Windows.Forms.TabPage();
             this.tabPageDepartureSchedule = new System.Windows.Forms.TabPage();
@@ -76,14 +74,32 @@ namespace WindowsFormsAirplanes
             this.labelNowTime = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.buttonHelp = new System.Windows.Forms.Button();
+            this.timerNextStep = new System.Windows.Forms.Timer(this.components);
+            this.dataGridViewRunways = new System.Windows.Forms.DataGridView();
+            this.runwayNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RunwayStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlightNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewDepartureQueue = new System.Windows.Forms.DataGridView();
+            this.dataGridViewArrivalQueue = new System.Windows.Forms.DataGridView();
+            this.A_application_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.A_flight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.A_delta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.D_application_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.D_flight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.D_delta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             tabControlAirplanes = new System.Windows.Forms.TabControl();
             tabControlAirplanes.SuspendLayout();
             this.tabPageData.SuspendLayout();
             this.tabPageRunways.SuspendLayout();
+            this.tabPageDepartureQueue.SuspendLayout();
+            this.tabPageArrivalQueue.SuspendLayout();
             this.tabPageDepartureSchedule.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDepartureSchedule)).BeginInit();
             this.tabPageArrivalSchedule.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArrivalSchedule)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRunways)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDepartureQueue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArrivalQueue)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlAirplanes
@@ -127,7 +143,6 @@ namespace WindowsFormsAirplanes
             this.tabPageData.TabIndex = 6;
             this.tabPageData.Text = "Data";
             this.tabPageData.UseVisualStyleBackColor = true;
-            this.tabPageData.Click += new System.EventHandler(this.tabPageData_Click);
             // 
             // statusStrip1
             // 
@@ -222,7 +237,6 @@ namespace WindowsFormsAirplanes
             this.labelRunwayMaintenanceTime.Size = new System.Drawing.Size(197, 20);
             this.labelRunwayMaintenanceTime.TabIndex = 7;
             this.labelRunwayMaintenanceTime.Text = "runway maintenance time: ";
-            this.labelRunwayMaintenanceTime.Click += new System.EventHandler(this.labelRunwayMaintenanceTime_Click);
             // 
             // comboBoxModulationStartTimeMinutes
             // 
@@ -256,7 +270,6 @@ namespace WindowsFormsAirplanes
             "10",
             "15",
             "20",
-            "25",
             "30"});
             this.comboBoxModulationStep.Location = new System.Drawing.Point(618, 99);
             this.comboBoxModulationStep.Name = "comboBoxModulationStep";
@@ -316,7 +329,6 @@ namespace WindowsFormsAirplanes
             this.labelStartTime.Size = new System.Drawing.Size(165, 20);
             this.labelStartTime.TabIndex = 2;
             this.labelStartTime.Text = "modulation start time: ";
-            this.labelStartTime.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBoxAmountOfRunways
             // 
@@ -349,9 +361,7 @@ namespace WindowsFormsAirplanes
             // 
             // tabPageRunways
             // 
-            this.tabPageRunways.Controls.Add(this.labelRunwayStatus);
-            this.tabPageRunways.Controls.Add(this.labelRunwayNumber);
-            this.tabPageRunways.Controls.Add(this.tableLayoutPanel1);
+            this.tabPageRunways.Controls.Add(this.dataGridViewRunways);
             this.tabPageRunways.Location = new System.Drawing.Point(4, 29);
             this.tabPageRunways.Name = "tabPageRunways";
             this.tabPageRunways.Padding = new System.Windows.Forms.Padding(3);
@@ -360,39 +370,9 @@ namespace WindowsFormsAirplanes
             this.tabPageRunways.Text = "Runways";
             this.tabPageRunways.UseVisualStyleBackColor = true;
             // 
-            // labelRunwayStatus
-            // 
-            this.labelRunwayStatus.AutoSize = true;
-            this.labelRunwayStatus.Location = new System.Drawing.Point(350, 28);
-            this.labelRunwayStatus.Name = "labelRunwayStatus";
-            this.labelRunwayStatus.Size = new System.Drawing.Size(56, 20);
-            this.labelRunwayStatus.TabIndex = 2;
-            this.labelRunwayStatus.Text = "Status";
-            // 
-            // labelRunwayNumber
-            // 
-            this.labelRunwayNumber.AutoSize = true;
-            this.labelRunwayNumber.Location = new System.Drawing.Point(57, 28);
-            this.labelRunwayNumber.Name = "labelRunwayNumber";
-            this.labelRunwayNumber.Size = new System.Drawing.Size(124, 20);
-            this.labelRunwayNumber.TabIndex = 1;
-            this.labelRunwayNumber.Text = "Runway number";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(27, 60);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.32609F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.67391F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 436);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
             // tabPageDepartureQueue
             // 
+            this.tabPageDepartureQueue.Controls.Add(this.dataGridViewDepartureQueue);
             this.tabPageDepartureQueue.Location = new System.Drawing.Point(4, 29);
             this.tabPageDepartureQueue.Name = "tabPageDepartureQueue";
             this.tabPageDepartureQueue.Padding = new System.Windows.Forms.Padding(3);
@@ -403,6 +383,7 @@ namespace WindowsFormsAirplanes
             // 
             // tabPageArrivalQueue
             // 
+            this.tabPageArrivalQueue.Controls.Add(this.dataGridViewArrivalQueue);
             this.tabPageArrivalQueue.Location = new System.Drawing.Point(4, 29);
             this.tabPageArrivalQueue.Name = "tabPageArrivalQueue";
             this.tabPageArrivalQueue.Padding = new System.Windows.Forms.Padding(3);
@@ -427,6 +408,7 @@ namespace WindowsFormsAirplanes
             this.dataGridViewDepartureSchedule.AllowUserToAddRows = false;
             this.dataGridViewDepartureSchedule.AllowUserToDeleteRows = false;
             this.dataGridViewDepartureSchedule.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dataGridViewDepartureSchedule.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewDepartureSchedule.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDepartureSchedule.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Time,
@@ -442,10 +424,10 @@ namespace WindowsFormsAirplanes
             this.dataGridViewDepartureSchedule.RowTemplate.Height = 28;
             this.dataGridViewDepartureSchedule.Size = new System.Drawing.Size(815, 511);
             this.dataGridViewDepartureSchedule.TabIndex = 1;
-            this.dataGridViewDepartureSchedule.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // Time
             // 
+            this.Time.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Time.Frozen = true;
             this.Time.HeaderText = "Time";
             this.Time.MinimumWidth = 8;
@@ -455,6 +437,7 @@ namespace WindowsFormsAirplanes
             // 
             // Flight
             // 
+            this.Flight.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Flight.Frozen = true;
             this.Flight.HeaderText = "Flight";
             this.Flight.MinimumWidth = 8;
@@ -464,6 +447,7 @@ namespace WindowsFormsAirplanes
             // 
             // Airline
             // 
+            this.Airline.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Airline.Frozen = true;
             this.Airline.HeaderText = "Airline";
             this.Airline.MinimumWidth = 8;
@@ -473,6 +457,7 @@ namespace WindowsFormsAirplanes
             // 
             // Airplane_type
             // 
+            this.Airplane_type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Airplane_type.Frozen = true;
             this.Airplane_type.HeaderText = "Airplane type";
             this.Airplane_type.MinimumWidth = 8;
@@ -482,6 +467,7 @@ namespace WindowsFormsAirplanes
             // 
             // Status
             // 
+            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Status.Frozen = true;
             this.Status.HeaderText = "Status";
             this.Status.MinimumWidth = 8;
@@ -505,6 +491,7 @@ namespace WindowsFormsAirplanes
             this.dataGridViewArrivalSchedule.AllowUserToAddRows = false;
             this.dataGridViewArrivalSchedule.AllowUserToDeleteRows = false;
             this.dataGridViewArrivalSchedule.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dataGridViewArrivalSchedule.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewArrivalSchedule.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewArrivalSchedule.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
@@ -523,6 +510,7 @@ namespace WindowsFormsAirplanes
             // 
             // dataGridViewTextBoxColumn1
             // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.dataGridViewTextBoxColumn1.Frozen = true;
             this.dataGridViewTextBoxColumn1.HeaderText = "Time";
             this.dataGridViewTextBoxColumn1.MinimumWidth = 8;
@@ -532,6 +520,7 @@ namespace WindowsFormsAirplanes
             // 
             // dataGridViewTextBoxColumn2
             // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.dataGridViewTextBoxColumn2.Frozen = true;
             this.dataGridViewTextBoxColumn2.HeaderText = "Flight";
             this.dataGridViewTextBoxColumn2.MinimumWidth = 8;
@@ -541,15 +530,18 @@ namespace WindowsFormsAirplanes
             // 
             // dataGridViewTextBoxColumn3
             // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.dataGridViewTextBoxColumn3.Frozen = true;
             this.dataGridViewTextBoxColumn3.HeaderText = "Airline";
             this.dataGridViewTextBoxColumn3.MinimumWidth = 8;
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewTextBoxColumn3.Width = 88;
             // 
             // dataGridViewTextBoxColumn4
             // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.dataGridViewTextBoxColumn4.Frozen = true;
             this.dataGridViewTextBoxColumn4.HeaderText = "Airplane type";
             this.dataGridViewTextBoxColumn4.MinimumWidth = 8;
@@ -559,6 +551,7 @@ namespace WindowsFormsAirplanes
             // 
             // dataGridViewTextBoxColumn5
             // 
+            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.dataGridViewTextBoxColumn5.Frozen = true;
             this.dataGridViewTextBoxColumn5.HeaderText = "Status";
             this.dataGridViewTextBoxColumn5.MinimumWidth = 8;
@@ -579,7 +572,6 @@ namespace WindowsFormsAirplanes
             // openFileDialogAirplanesWithTheirTypes
             // 
             this.openFileDialogAirplanesWithTheirTypes.FileName = "openFileDialogAirplanesWithTypes";
-            this.openFileDialogAirplanesWithTheirTypes.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogAirplanesWithTheirTypes_FileOk);
             // 
             // openFileDialogTypesWithDurations
             // 
@@ -597,7 +589,6 @@ namespace WindowsFormsAirplanes
             this.labelCurrentTime.Size = new System.Drawing.Size(101, 20);
             this.labelCurrentTime.TabIndex = 1;
             this.labelCurrentTime.Text = "current time: ";
-            this.labelCurrentTime.Click += new System.EventHandler(this.labelCurrentTime_Click);
             // 
             // buttonNextStep
             // 
@@ -626,6 +617,146 @@ namespace WindowsFormsAirplanes
             this.buttonHelp.TabIndex = 7;
             this.buttonHelp.Text = "help";
             this.buttonHelp.UseVisualStyleBackColor = true;
+            this.buttonHelp.Click += new System.EventHandler(this.buttonHelp_Click);
+            // 
+            // timerNextStep
+            // 
+            this.timerNextStep.Interval = 3000;
+            this.timerNextStep.Tick += new System.EventHandler(this.timerNextStep_Tick);
+            // 
+            // dataGridViewRunways
+            // 
+            this.dataGridViewRunways.AllowUserToAddRows = false;
+            this.dataGridViewRunways.AllowUserToDeleteRows = false;
+            this.dataGridViewRunways.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRunways.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.runwayNumber,
+            this.RunwayStatus,
+            this.FlightNumber});
+            this.dataGridViewRunways.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewRunways.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewRunways.Name = "dataGridViewRunways";
+            this.dataGridViewRunways.ReadOnly = true;
+            this.dataGridViewRunways.RowHeadersWidth = 62;
+            this.dataGridViewRunways.RowTemplate.Height = 28;
+            this.dataGridViewRunways.Size = new System.Drawing.Size(815, 511);
+            this.dataGridViewRunways.TabIndex = 0;
+            // 
+            // runwayNumber
+            // 
+            this.runwayNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.runwayNumber.Frozen = true;
+            this.runwayNumber.HeaderText = "Runway Number";
+            this.runwayNumber.MinimumWidth = 8;
+            this.runwayNumber.Name = "runwayNumber";
+            this.runwayNumber.ReadOnly = true;
+            this.runwayNumber.Width = 149;
+            // 
+            // RunwayStatus
+            // 
+            this.RunwayStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.RunwayStatus.Frozen = true;
+            this.RunwayStatus.HeaderText = "Status";
+            this.RunwayStatus.MinimumWidth = 8;
+            this.RunwayStatus.Name = "RunwayStatus";
+            this.RunwayStatus.ReadOnly = true;
+            this.RunwayStatus.Width = 92;
+            // 
+            // FlightNumber
+            // 
+            this.FlightNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlightNumber.Frozen = true;
+            this.FlightNumber.HeaderText = "Flight number";
+            this.FlightNumber.MinimumWidth = 8;
+            this.FlightNumber.Name = "FlightNumber";
+            this.FlightNumber.ReadOnly = true;
+            this.FlightNumber.Width = 131;
+            // 
+            // dataGridViewDepartureQueue
+            // 
+            this.dataGridViewDepartureQueue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDepartureQueue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.D_application_time,
+            this.D_flight,
+            this.D_delta});
+            this.dataGridViewDepartureQueue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewDepartureQueue.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewDepartureQueue.Name = "dataGridViewDepartureQueue";
+            this.dataGridViewDepartureQueue.ReadOnly = true;
+            this.dataGridViewDepartureQueue.RowHeadersWidth = 62;
+            this.dataGridViewDepartureQueue.RowTemplate.Height = 28;
+            this.dataGridViewDepartureQueue.Size = new System.Drawing.Size(815, 511);
+            this.dataGridViewDepartureQueue.TabIndex = 0;
+            // 
+            // dataGridViewArrivalQueue
+            // 
+            this.dataGridViewArrivalQueue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewArrivalQueue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.A_application_time,
+            this.A_flight,
+            this.A_delta});
+            this.dataGridViewArrivalQueue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewArrivalQueue.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewArrivalQueue.Name = "dataGridViewArrivalQueue";
+            this.dataGridViewArrivalQueue.ReadOnly = true;
+            this.dataGridViewArrivalQueue.RowHeadersWidth = 62;
+            this.dataGridViewArrivalQueue.RowTemplate.Height = 28;
+            this.dataGridViewArrivalQueue.Size = new System.Drawing.Size(815, 511);
+            this.dataGridViewArrivalQueue.TabIndex = 1;
+            // 
+            // A_application_time
+            // 
+            this.A_application_time.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.A_application_time.HeaderText = "Application time";
+            this.A_application_time.MinimumWidth = 8;
+            this.A_application_time.Name = "A_application_time";
+            this.A_application_time.ReadOnly = true;
+            this.A_application_time.Width = 144;
+            // 
+            // A_flight
+            // 
+            this.A_flight.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.A_flight.HeaderText = "Flight";
+            this.A_flight.MinimumWidth = 8;
+            this.A_flight.Name = "A_flight";
+            this.A_flight.ReadOnly = true;
+            this.A_flight.Width = 84;
+            // 
+            // A_delta
+            // 
+            this.A_delta.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.A_delta.HeaderText = "Delta";
+            this.A_delta.MinimumWidth = 8;
+            this.A_delta.Name = "A_delta";
+            this.A_delta.ReadOnly = true;
+            this.A_delta.Width = 83;
+            // 
+            // D_application_time
+            // 
+            this.D_application_time.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.D_application_time.HeaderText = "Application time";
+            this.D_application_time.MinimumWidth = 8;
+            this.D_application_time.Name = "D_application_time";
+            this.D_application_time.ReadOnly = true;
+            this.D_application_time.Width = 144;
+            // 
+            // D_flight
+            // 
+            this.D_flight.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.D_flight.HeaderText = "Flight";
+            this.D_flight.MinimumWidth = 8;
+            this.D_flight.Name = "D_flight";
+            this.D_flight.ReadOnly = true;
+            this.D_flight.Width = 84;
+            // 
+            // D_delta
+            // 
+            this.D_delta.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.D_delta.HeaderText = "Delta";
+            this.D_delta.MinimumWidth = 8;
+            this.D_delta.Name = "D_delta";
+            this.D_delta.ReadOnly = true;
+            this.D_delta.Width = 83;
             // 
             // FormRunwayController
             // 
@@ -638,19 +769,25 @@ namespace WindowsFormsAirplanes
             this.Controls.Add(this.labelCurrentTime);
             this.Controls.Add(tabControlAirplanes);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.HelpButton = true;
+            this.helpProvider1.SetHelpString(this, "help");
             this.Name = "FormRunwayController";
+            this.helpProvider1.SetShowHelp(this, true);
             this.Text = "RunwayController";
-            this.Load += new System.EventHandler(this.FormRunwayController_Load);
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.FormRunwayController_HelpRequested);
             tabControlAirplanes.ResumeLayout(false);
             this.tabPageData.ResumeLayout(false);
             this.tabPageData.PerformLayout();
             this.tabPageRunways.ResumeLayout(false);
-            this.tabPageRunways.PerformLayout();
+            this.tabPageDepartureQueue.ResumeLayout(false);
+            this.tabPageArrivalQueue.ResumeLayout(false);
             this.tabPageDepartureSchedule.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDepartureSchedule)).EndInit();
             this.tabPageArrivalSchedule.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArrivalSchedule)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRunways)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDepartureQueue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArrivalQueue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -689,21 +826,31 @@ namespace WindowsFormsAirplanes
         private System.Windows.Forms.Label labelNowTime;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Button buttonHelp;
-        private System.Windows.Forms.Label labelRunwayStatus;
-        private System.Windows.Forms.Label labelRunwayNumber;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dataGridViewDepartureSchedule;
+        private System.Windows.Forms.DataGridView dataGridViewArrivalSchedule;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Flight;
         private System.Windows.Forms.DataGridViewTextBoxColumn Airline;
         private System.Windows.Forms.DataGridViewTextBoxColumn Airplane_type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridView dataGridViewArrivalSchedule;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.Timer timerNextStep;
+        private System.Windows.Forms.DataGridView dataGridViewRunways;
+        private System.Windows.Forms.DataGridViewTextBoxColumn runwayNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RunwayStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FlightNumber;
+        private System.Windows.Forms.DataGridView dataGridViewDepartureQueue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn D_application_time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn D_flight;
+        private System.Windows.Forms.DataGridViewTextBoxColumn D_delta;
+        private System.Windows.Forms.DataGridView dataGridViewArrivalQueue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn A_application_time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn A_flight;
+        private System.Windows.Forms.DataGridViewTextBoxColumn A_delta;
     }
 }
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using KursovayaOOP_f;
+using System.Diagnostics;
 
 namespace WindowsFormsAirplanes
 {
@@ -35,7 +36,7 @@ namespace WindowsFormsAirplanes
             buttonGenerateSchedule.Enabled = false;
             buttonStart.Enabled = false;
             buttonNextStep.Enabled = false;
-            DataProcessing.currentTime = new DateTime();
+            DataProcessing.currentTime = new DateTime(2, 1, 1);
         }
 
         public void changeVisibleButtons()
@@ -76,17 +77,10 @@ namespace WindowsFormsAirplanes
             else
                 buttonNextStep.Enabled = false;
             if (modulationEnded)
+            {
                 buttonNextStep.Enabled = false;
-        }
-
-        private void FormRunwayController_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
+                timerNextStep.Enabled = false;
+            }
         }
 
         private void comboBoxRunwayMaintenanceTime_SelectedIndexChanged(object sender, EventArgs e)
@@ -94,11 +88,6 @@ namespace WindowsFormsAirplanes
             comboBoxRunwayMaintenanceTime_selected = true;
             DataProcessing.maintenanceTime = int.Parse(comboBoxRunwayMaintenanceTime.Text);
             changeVisibleButtons();
-        }
-
-        private void labelRunwayMaintenanceTime_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void buttonManualShedule_Click(object sender, EventArgs e)
@@ -119,6 +108,40 @@ namespace WindowsFormsAirplanes
             changeVisibleButtons();
         }
 
+        private void fill_runways_page()
+        {
+            dataGridViewRunways.Rows.Clear();
+            foreach (KeyValuePair<int, Runway> runway in DataProcessing.runways)
+            {
+                string[] way = { "0", "1", "" };
+                way[0] = runway.Key.ToString();
+                if (runway.Value.countAirplanes() == 0)
+                    way[1] = "free";
+                else
+                {
+                    Airplane now_plane = runway.Value.usingAirplane(DataProcessing.currentTime);
+                    if (now_plane.runwayNumber == 0)
+                        way[1] = "free";
+                    else
+                    {
+                        if (!runway.Value.is_free(DataProcessing.currentTime))
+                        {
+                            way[1] = "in use";
+                            way[2] = now_plane.flight;
+                            if (DataProcessing.currentTime >= now_plane.applicationTime.AddMinutes(now_plane.getRequiredTimeInterval() - DataProcessing.maintenanceTime))
+                            {
+                                way[1] = "maintenance";
+                                way[2] = "after " + way[2];
+                            }
+                        }
+                        else
+                            way[1] = "free";
+                    }
+                }
+                dataGridViewRunways.Rows.Add(way);
+            }
+        }
+
         private void buttonStart_Click(object sender, EventArgs e)
         {
             labelNowTime.Text = DataProcessing.currentTime.ToShortTimeString();
@@ -127,7 +150,17 @@ namespace WindowsFormsAirplanes
             DataProcessing.readDurations();
             if (buttonGenerateSchedule_clicked)
             {
-                DataProcessing.generateSchedule();  
+                DataProcessing.generateSchedule();
+                DataProcessing.init_correct();
+                fill_separeted_schedules();
+                fill_runways_page();
+                fill_queues();
+                if (comboBoxModulationMode.SelectedIndex == 0)
+                {
+                    timerNextStep.Interval = 3000; // in milliseconds
+                    timerNextStep.Enabled = true;
+                   // timerNextStep.Tick += new EventHandler(timerNextStep_Tick);
+                }
             }
             else if (buttonManualShedule_clicked)
             {
@@ -140,9 +173,18 @@ namespace WindowsFormsAirplanes
                     buttonStart_clicked = false;
                     changeVisibleButtons();
                 }
-                else 
+                else
                 {
+                    DataProcessing.init_correct();
                     fill_separeted_schedules();
+                    fill_runways_page();
+                    fill_queues();
+                    if (comboBoxModulationMode.SelectedIndex == 0)
+                    {
+                        timerNextStep.Interval = 3000; // in milliseconds
+                        timerNextStep.Enabled = true;
+                        //timerNextStep.Tick += new EventHandler(timerNextStep_Tick);
+                    }
                 }
             }
             
@@ -152,63 +194,99 @@ namespace WindowsFormsAirplanes
         {
             dataGridViewArrivalSchedule.Rows.Clear();
             dataGridViewDepartureSchedule.Rows.Clear();
+            // надо составить сортированный по времени лист из самолетов на полосах и из самолетов в очереди
+
             foreach (Airplane airplane in DataProcessing.airplanes)
             {
-                if (airplane.IsArriving)
+                string status = "";
+                
+                DateTime applTime = DataProcessing.find_in_runways(airplane.flight);
+                if (applTime != new DateTime())
                 {
-                    string status;
-                    if ((DataProcessing.currentTime >= airplane.ApplicationTime.AddMinutes(airplane.Delta))&&(DataProcessing.currentTime < airplane.ApplicationTime.AddMinutes(airplane.Delta + airplane.timeIntervals.arrivalDuration))) // учитывает время обслуживания полосы после приземления самолета как время его посадки
-                    {
-                        status = "now landing";
-                        if (airplane.Delta < 0)
-                            status = "now landing, " + (-airplane.Delta).ToString() + " min earlier";
-                        else if (airplane.Delta > 0)
-                            status = "now landing, " + (airplane.Delta).ToString() + " min later";
-                    }
-                    else if (airplane.applicationTime.AddMinutes(airplane.Delta) < DataProcessing.currentTime)
-                    {
-                        status = "landed on time";
-                        if (airplane.Delta > 0)
-                            status = "landed " + airplane.Delta.ToString() + " min later";
-                        else if (airplane.Delta < 0)
-                            status = "landed " + (-airplane.Delta).ToString() + " min earlier";
+                    int real_delta = (int)applTime.Subtract(airplane.applicationTime).TotalMinutes;
+                    if ((DataProcessing.currentTime >= applTime) && (DataProcessing.currentTime < applTime.AddMinutes(airplane.getRequiredTimeInterval() - DataProcessing.maintenanceTime)))
+                    { // самолет сейчас на полосе, возможно, идет время обслуживания
+                        status += "now ";
+                        //if (DataProcessing.currentTime >= applTime.AddMinutes(airplane.getRequiredTimeInterval() - DataProcessing.maintenanceTime))
+                        //{
+                        //    status = "maintenance ";
+                        //}
+                        if (real_delta != 0)
+                            status += " with delta = " + real_delta.ToString();
                     }
                     else
                     {
-                        status = "should land on time";
-                        if (airplane.Delta > 0)
-                            status = "arrival is delayed for " + airplane.Delta.ToString() + " min";
+                        if (DataProcessing.currentTime < applTime)
+                        {
+                            if (real_delta == 0)
+                                status += "will be at time";
+                            else
+                                status += "will be with delta = " + real_delta.ToString();
+                        }
+                        else
+                        {
+                            if (real_delta == 0)
+                                status += "was at time";
+                            else
+                                status += "was with delta = " + real_delta.ToString();
+                        }
                     }
-                    string[] plane = { airplane.applicationTime.ToShortTimeString(), airplane.Flight, airplane.CompanyName, airplane.type,  status};
+                }
+                else
+                { // тогда рейс в очереди на посадку/взлет
+                    if (airplane.delta > 0)
+                        status = "is later for " + airplane.delta.ToString() + ", waiting";
+                    else if (airplane.delta < 0)
+                        status = "is earlier for " + (-airplane.delta).ToString() + ", waiting";
+                    else
+                        status = "in queue "; // никогда не должно являться
+
+                }
+                string[] plane = { airplane.applicationTime.ToShortTimeString(), airplane.flight, airplane.companyName, airplane.type, status };
+                if (airplane.isArriving)
+                {
+                    plane[4] = "arriving " + plane[4];
                     dataGridViewArrivalSchedule.Rows.Add(plane);
                 }
-                else 
+                else
                 {
-                    string status;
-                    if ((DataProcessing.currentTime >= airplane.ApplicationTime.AddMinutes(airplane.Delta)) && (airplane.ApplicationTime.AddMinutes(airplane.Delta + airplane.timeIntervals.departureDuration) > DataProcessing.currentTime))
-                    {
-                        status = "now taking off";
-                        if (airplane.Delta != 0)
-                            status = "now taking off, " + (airplane.Delta).ToString() + " min later";
-                    }
-                    else if (airplane.applicationTime.AddMinutes(airplane.Delta) < DataProcessing.currentTime)
-                    {
-                        status = "departured on time";
-                        if (airplane.Delta != 0)
-                            status = "departured " + airplane.Delta.ToString() + " min later";
-                    }
-                    else
-                    {
-                        if (airplane.Delta == 0)
-                            status = "should take off on time";
-                        else
-                            status = "departure is delayed for " + airplane.Delta.ToString() + " min";
-                    }
-                    string[] plane = { airplane.applicationTime.ToShortTimeString(), airplane.Flight, airplane.CompanyName, airplane.type, status};
+                    plane[4] = "departuring " + plane[4];
                     dataGridViewDepartureSchedule.Rows.Add(plane);
                 }
             }
+
         }
+
+        public void fill_queues()
+        {
+            dataGridViewDepartureQueue.Rows.Clear();
+            dataGridViewArrivalQueue.Rows.Clear();
+            string[] plane = new string[3];
+            foreach (Airplane airplane in DataProcessing.arrival_queue)
+            {
+                plane[0] = airplane.applicationTime.ToShortTimeString();
+                plane[1] = airplane.flight;
+                plane[2] = airplane.delta.ToString();
+                if (airplane.isArriving)
+                    dataGridViewArrivalQueue.Rows.Add(plane);
+                else
+                    dataGridViewDepartureQueue.Rows.Add(plane);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         
         private void buttonTypesWithDurations_Click(object sender, EventArgs e)
         {
@@ -219,10 +297,6 @@ namespace WindowsFormsAirplanes
             DataProcessing.typesWithDurationsFilename = openFileDialogTypesWithDurations.FileName;
             buttonTypesWithDurations_clicked = true;
             changeVisibleButtons(); 
-        }
-
-        private void openFileDialogAirplanesWithTheirTypes_FileOk(object sender, CancelEventArgs e)
-        {
         }
 
         private void buttonGenerateSchedule_Click(object sender, EventArgs e)
@@ -254,13 +328,9 @@ namespace WindowsFormsAirplanes
 
         private void comboBoxModulationMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             comboBoxModulationMode_selected = true;
             changeVisibleButtons();
-        }
-
-        private void tabPageData_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void FormRunwayController_HelpRequested(object sender, HelpEventArgs hlpevent)
@@ -272,7 +342,15 @@ namespace WindowsFormsAirplanes
         {
             DataProcessing.currentTime = DataProcessing.currentTime.AddMinutes(DataProcessing.modulationStep);
             labelNowTime.Text = DataProcessing.currentTime.ToShortTimeString();
+            DataProcessing.correctDeltas();
             fill_separeted_schedules();
+            fill_runways_page();
+            fill_queues();
+            for (int i = 0; i < DataProcessing.arrival_queue.Count; i++)
+            {
+                DataProcessing.arrival_queue[i].delta += DataProcessing.modulationStep;
+                DataProcessing.airplanes[DataProcessing.find_airplane_index(DataProcessing.arrival_queue[i].flight)].delta = DataProcessing.arrival_queue[i].delta;
+            }
             if ((int.Parse(comboBoxModulationStartTimeHours.Text) == DataProcessing.currentTime.Hour) && (int.Parse(comboBoxModulationStartTimeMinutes.Text) == DataProcessing.currentTime.Minute))
             {
                 modulationEnded = true;
@@ -282,34 +360,14 @@ namespace WindowsFormsAirplanes
 
         }
 
-        private void labelNowHour_Click(object sender, EventArgs e)
+        private void timerNextStep_Tick(object sender, EventArgs e)
         {
-
+            buttonNextStep_Click(sender, e);
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void buttonHelp_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void labelNowMinutes_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void labelCurrentTime_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
+            Process.Start("HELP.txt");
         }
     }
 }
